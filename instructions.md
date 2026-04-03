@@ -84,27 +84,71 @@ python3 main.py
 
 The game window should appear! Use:
 - Left player: **W** (up) and **S** (down)
-- Right player: **↑** (up) and **↓** (down)
+- Right player: **↑** (up arrow) and **↓** (down arrow)
 
 **Close the game window** when you're ready to continue.
 
 ### Phase 3: Customize! (40 min)
 
-Now for the fun part - make this game YOURS!
+Now for the fun part - make this game YOURS! Open `main.py` and find each `# TODO` comment.
 
-#### Challenge 1: Change Colors (Easy)
-Open `main.py` and find the `# TODO: STUDENT CHALLENGE 2` section. Try:
-- Changing `BLACK` to `(50, 50, 150)` for a blue background
-- Changing `WHITE` to `(255, 200, 0)` for gold paddles
+#### Challenge 1: Change Window Size (Easy)
+Find `# TODO: STUDENT CHALLENGE 1` and change:
+```python
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+```
+Try `SCREEN_WIDTH = 1024` and `SCREEN_HEIGHT = 768` for a bigger game!
 
-#### Challenge 2: Change Game Speed (Medium)
-Find the `Ball` class's `__init__` method. Look for `speed_x=4, speed_y=4`. Try `speed_x=6, speed_y=6` for a faster game!
+#### Challenge 2: Change Colors (Easy)
+Find `# TODO: STUDENT CHALLENGE 2` and experiment:
+- Change `BLACK` to `(50, 50, 150)` for a blue background
+- Change `WHITE` to `(255, 200, 0)` for gold paddles
+- Change `BALL_COLOR` to `(255, 0, 255)` for a purple ball
 
 #### Challenge 3: Change Winning Score (Easy)
-Find `WINNING_SCORE = 5` and change it to `3` for a shorter game or `10` for a longer challenge.
+Find `# TODO: STUDENT CHALLENGE 3` and change:
+```python
+WINNING_SCORE = 5
+```
+Try `3` for a quicker game or `10` for a longer challenge.
 
 #### Challenge 4: Add Your Name (Super Easy)
-Find `pygame.display.set_caption("PONG - Your Name Here")` and replace "Your Name Here" with your actual name!
+Find `# TODO: Add your name!` and replace "Your Name Here":
+```python
+pygame.display.set_caption("PONG - Your Name Here")
+```
+
+#### Challenge 5: Change Paddle Color (Easy)
+Find `# TODO: STUDENT CHALLENGE 4` inside the `Paddle` class. Change:
+```python
+self.color = WHITE
+```
+To something like `self.color = (0, 255, 0)` for a green paddle!
+
+#### Challenge 6: Change Ball Speed (Medium)
+Find `# TODO: STUDENT CHALLENGE 5` inside the `Ball` class `__init__` method. Look for:
+```python
+self.ball = Ball(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, 8, 4, 4)
+```
+The last two numbers `(4, 4)` are the speed. Try `(6, 6)` for a faster ball!
+
+#### Challenge 7: Random Direction on Reset (Advanced)
+Find `# TODO: STUDENT CHALLENGE 6` inside the `reset` method. Add this code:
+```python
+import random
+self.speed_x = random.choice([-4, 4])
+self.speed_y = random.choice([-4, 4])
+```
+
+#### Challenge 8: Add Sound Effects (Bonus)
+Find `# TODO: STUDENT CHALLENGE 7` inside `handle_collisions`. You'll need a `beep.wav` file, or try:
+```python
+import pygame
+pygame.mixer.init()
+beep = pygame.mixer.Sound(pygame.mixer.Sound(buffer=bytes([0]*1000)))  # Silent placeholder
+beep.play()
+```
 
 ### Phase 4: Save Your Work with Git (15 min)
 
@@ -148,10 +192,10 @@ You've successfully:
 
 ## 🔥 Bonus Challenges (If You Finish Early)
 
-1. **Add a sound effect** when the ball hits a paddle (look for `# TODO 7`)
-2. **Make the ball speed increase** each time it hits a paddle
-3. **Change the paddle size** (make them longer or shorter)
-4. **Add a "Start Game" screen** before the game begins
+1. **Change paddle speed** - Find `Paddle(..., 7)` and change the last number (speed)
+2. **Change paddle size** - Find `Paddle(..., 15, 120, 7)` and change the width (15) or height (120)
+3. **Change ball radius** - Find `Ball(..., 8, 4, 4)` and change the 8 to something like 12
+4. **Add a second ball** - Create another ball object and update it in the game loop
 
 ## 🆘 Troubleshooting
 
@@ -163,6 +207,7 @@ You've successfully:
 | Can't push to GitHub | Make sure you forked (not cloned directly from instructor) |
 | VS Code can't find Python | `Ctrl+Shift+P` → "Python: Select Interpreter" → choose the one with Python 3.8+ |
 | "python" command not found | Try `py` or `python3` instead |
+| Game window is blank | Make sure you didn't delete `screen.fill(BLACK)` |
 
 ## 📚 Resources
 
