@@ -7,28 +7,35 @@ This code is intentionally left with customization opportunities for students.
 # Import the required libraries
 import pygame
 import sys
+import random
+import math  
 
 # Initialize Pygame (this starts all the game modules)
 pygame.init()
+pygame.mixer.init()
+
+sound_beep = pygame.mixer.Sound('sound.wav')
+sound_hit = pygame.mixer.Sound('Hit4.wav')
 
 # --- Game Constants (Things that rarely change) ---
 # TODO: STUDENT CHALLENGE 1 - Change the game window size!
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 1000
+SCREEN_HEIGHT = 800
 
 # Colors in RGB format (Red, Green, Blue)
 # TODO: STUDENT CHALLENGE 2 - Change the colors below to your favorites!
+PADDLE_COLOR = (211, 74, 74)  
 WHITE = (255, 255, 255)      # Try (0, 255, 0) for neon green
-BLACK = (0, 0, 0)            # Try (255, 0, 0) for red background
-BALL_COLOR = (255, 255, 255) # Try (255, 255, 0) for yellow ball
+BLACK = (60, 99, 142)            # Try (255, 0, 0) for red background
+BALL_COLOR = (223, 255, 79) # Try (255, 255, 0) for yellow ball
 
 # Game Settings
 FPS = 60  # Frames per second (how smooth the game runs)
-WINNING_SCORE = 5  # TODO: STUDENT CHALLENGE 3 - Change this to 3 or 10!
+WINNING_SCORE = 3  # TODO: STUDENT CHALLENGE 3 - Change this to 3 or 10!
 
 # Set up the game window
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("PONG - Your Name Here")  # TODO: Add your name!
+pygame.display.set_caption("PONG - wiam")  # TODO: Add your name!
 
 # Clock controls the game speed
 clock = pygame.time.Clock()
@@ -49,7 +56,7 @@ class Paddle:
         self.rect = pygame.Rect(x, y, width, height)
         self.speed = speed
         # TODO: STUDENT CHALLENGE 4 - Try changing the paddle color!
-        self.color = WHITE
+        self.color = PADDLE_COLOR
         
     def move(self, up_key, down_key):
         """
@@ -81,17 +88,19 @@ class Ball:
         :param speed_x: Horizontal speed (negative = left, positive = right)
         :param speed_y: Vertical speed
         """
-        self.rect = pygame.Rect(x - radius, y - radius, radius * 2, radius * 2)
+        self.rect = pygame.Rect(x - radius, y - radius, radius * 4, radius * 4)
         self.radius = radius
         self.speed_x = speed_x
         self.speed_y = speed_y
         self.color = BALL_COLOR
+        self.speed_x = random.randint(4, 10) 
+        self.speed_y = random.randint(4, 10) 
         # TODO: STUDENT CHALLENGE 5 - Change the starting speed (try 5, 4 or 7, 6)
         
     def move(self):
         """Update ball position based on its speed."""
-        self.rect.x += self.speed_x
-        self.rect.y += self.speed_y
+        self.rect.x -= self.speed_x
+        self.rect.y -= self.speed_y
         
     def draw(self):
         """Draw the ball on the screen."""
@@ -102,12 +111,7 @@ class Ball:
         self.rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
         # TODO: STUDENT CHALLENGE 6 - Make the ball go in a random direction on reset!
         # Hint: You can randomize self.speed_x and self.speed_y
-        self.speed_x = abs(self.speed_x)  # Make it go right by default
-        # Flip a coin to decide if it goes up or down
-        if self.speed_y < 0:
-            self.speed_y = -abs(self.speed_y)
-
-
+        
 class GameManager:
     """Controls the game logic, scoring, and win conditions."""
     
@@ -141,9 +145,10 @@ class GameManager:
         # Paddle collisions
         if self.ball.rect.colliderect(self.left_paddle.rect) or \
            self.ball.rect.colliderect(self.right_paddle.rect):
-            self.ball.speed_x *= -1  # Reverse horizontal direction
+           self.ball.speed_x *= -1  # Reverse horizontal direction
             # TODO: STUDENT CHALLENGE 7 - Add a sound effect here!
             # Hint: pygame.mixer.Sound('beep.wav').play()
+           sound_hit.play()
             
     def update_score(self):
         """Update scores if ball goes past paddles and check for winner."""
@@ -179,6 +184,7 @@ class GameManager:
         overlay.set_alpha(128)
         overlay.fill(BLACK)
         screen.blit(overlay, (0, 0))
+        sound_beep.play()
         
         # Winner text
         winner_text = self.font.render(f"{self.winner} Wins!", True, WHITE)
@@ -218,10 +224,11 @@ class GameManager:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
+                    sound_beep.play()
                     
             # Check if game is over
             if self.winner:
-                self.draw_winner()
+                self.draw_winner() 
                 continue  # Skip the rest of the loop until game resets
                 
             # Move objects
